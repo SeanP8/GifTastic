@@ -1,27 +1,45 @@
 // Create an initial newPerson variable
 //var newPersonCount = 0;
+var btnArr = [];
+
+$("#add").on("click", function () {
+    // input(); 
+    event.preventDefault();
+    var userInput = $("#exampleFormControlInput1").val().trim();
+    for (var i = 0; i < btnArr.length; i++) {
+        var inputName = $("<button>");
+        inputName.attr("id", "item-");
+        inputName.text(userInput);
+        btnArr.push(inputName);
+    }
+    console.log(userInput);
+})
+
+
+
+var input = function () {
+
+
+    // creat a new variable that will hold the placeholder "value" as a button
+
+    // Then give it a data-person
+
+
+
+}
+
+
+
 
 // Event listner on all button elements
 $("button").on('click', function () {
 
-    //get the placeholder "value" from the textbox and store it as a variable
-    var input = function () {
-        $("#exampleFormControlInput1").val().trim();
-
-        // creat a new variable that will hold the placeholder "value" as a button
-        var inputName = $("<button>");
-        // Then give it a data-person
-        inputName.attr("id", "item-" + data - person);
-        inputName.text(input);
-    };
 
 
-
-    input();
-    console.log(input);
     //  debugger;
     // the This refers to the button that was clicked
     var person = $(this).attr("data-person");
+    console.log(person);
     // constructing a url to search Giphy for the name of the person who said the quote
     var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
         person + "&api_key=vwG8pCwU6gRWLOOesOGH7OMkNazoi8hz&limit=10";
@@ -72,9 +90,24 @@ $("button").on('click', function () {
                 }
             }
         });
+    //get the placeholder "value" from the textbox and store it as a variable
+
 });
 
 
- // Event listener on the submit button
+// //  // Event listener on the submit button
+// var input = function () {
+//         $("#exampleFormControlInput1").val().trim();
 
+//         // creat a new variable that will hold the placeholder "value" as a button
+//         var inputName = $("<button>");
+//         // Then give it a data-person
+//         inputName.attr("id", "item-" + data - person);
+//         inputName.text(input);
+//     };
+
+
+
+//     input();
+//     console.log(input);
 
