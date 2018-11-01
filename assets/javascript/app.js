@@ -1,113 +1,82 @@
-// Create an initial newPerson variable
-//var newPersonCount = 0;
-var btnArr = [];
+// create a function upon the page loading
+$(function() {
 
-$("#add").on("click", function () {
-    // input(); 
-    event.preventDefault();
-    var userInput = $("#exampleFormControlInput1").val().trim();
-    for (var i = 0; i < btnArr.length; i++) {
-        var inputName = $("<button>");
-        inputName.attr("id", "item-");
-        inputName.text(userInput);
-        btnArr.push(inputName);
+    populateButtons(srchArr, 'searchButton', '#BtnArea');
+    console.log("page loaded");
+})
+
+// Create a function that will populate the btnArea with button
+
+// 1st Create an initial button variable 
+
+var srchArr = ['Adam Sandler','Wesley Snipes', 'Arnold Schwarzenegger'];
+
+// 
+function populateButtons(srchArr, classToAdd, areaToAddTo) {
+    // need to empty out the buttons area everytime we add a new button
+    $(areaToAddTo).empty();
+    for(var i=0; i<srchArr.length; i++) {
+        //
+        var a = $('<button>');
+        a.addClass(classToAdd);
+        // adding in a type of data that is = to items in array
+        a.attr('data-type',srchArr[i]);
+        // the text of the button is going to be = to whats entered into search
+        a.text(srchArr[i]);
+        $(areaToAddTo).append(a);
     }
-    console.log(userInput);
+}
+
+$(document).on('click', '.searchButton' ,function() {
+    var type= $(this).data('type');
+    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+             type + "&api_key=vwG8pCwU6gRWLOOesOGH7OMkNazoi8hz&limit=10";
+             $.ajax({
+                 url: queryURL,
+                 method: "GET"
+             })
+             .done(function(response) {
+                for (var i = 0; i < response.data.length; i++){
+                    var searchDiv = $('<div class="search-item">');
+                    var rating = response.data[i].rating;
+                    var p = $('<p>').text('Rating' +rating);
+                    var animated = response.data[i].images.fixed_height.url;
+                    var still = response.data[i].images.fixed_height_still.url; 
+                    var image = $('<img>');
+                        image.attr('src',still); 
+                        image.attr('data-still', still);
+                        image.attr('data-animated', animated);
+                        image.attr('data-state','still');
+                        image.addClass('searchImage');
+                        searchDiv.append(p);
+                        searchDiv.append(image);
+                        $('#searches').append(searchDiv);
+                }
+             })
+    
+})
+
+$(document).on('click', '.searchImage', function() {
+    
+    var state = $(this).data('state');
+    if(state == 'still') {
+        $(this).attr('src',$(this).data('animated'));
+        $(this).attr('data-state', 'animated');
+    } else {
+        $(this).attr('src',$(this).data('still'));
+        $(this).attr('data-state', 'still');
+    }
+})
+
+// get the text box to add new buttons
+$('#submit').on('click', function (e) {
+    e.preventDefault();
+    var newSearch = $('input').eq(0).val();
+   
+    srchArr.push(newSearch);
+    populateButtons(srchArr, 'searchButton', '#BtnArea');
+    return false;
 })
 
 
-
-var input = function () {
-
-
-    // creat a new variable that will hold the placeholder "value" as a button
-
-    // Then give it a data-person
-
-
-
-}
-
-
-
-
-// Event listner on all button elements
-$("button").on('click', function () {
-
-
-
-    //  debugger;
-    // the This refers to the button that was clicked
-    var person = $(this).attr("data-person");
-    console.log(person);
-    // constructing a url to search Giphy for the name of the person who said the quote
-    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
-        person + "&api_key=vwG8pCwU6gRWLOOesOGH7OMkNazoi8hz&limit=10";
-
-    // Performing the AJAX GET request
-
-    $.ajax({
-        url: queryURL,
-        method: "GET"
-    })
-        // After the data comes back from the API
-
-        .then(function (response) {
-            // Storing the array of results in the results variable
-
-
-            var results = response.data;
-            console.log(response);
-            // Looping over every result item
-
-            for (var i = 0; i < results.length; i++) {
-
-                // only taking action if the photo has an appropriate rating
-                console.log("for loop is running");
-                if (results[i].rating !== "r" && results[i].rating !== "pg-13") {
-                    console.log("inside if statement");
-                    // Creating a div for the gif
-                    var gifDiv = $("<div>");
-
-                    // Storing the results in item's rating
-
-                    var rating = results[i].rating;
-
-                    // Creating a paragraph tag with the result item's rating
-                    var p = $("<p>").text("Rating: " + rating);
-
-                    // Creating an image tag
-                    var personImage = $("<img>");
-
-                    // Giving the iamge tag a src attribute of a propert pulled off the result item
-                    personImage.attr("src", results[i].images.fixed_height.url);
-
-                    // Appending the paragraph and personImage we created to the "gifDiv" div we created 
-                    gifDiv.append(p);
-                    gifDiv.append(personImage);
-                    // Prepending the gifDiv to the "#gifs-appear-hear" div in the HTML
-                    $("#gifs-appear-here").prepend(gifDiv);
-                }
-            }
-        });
-    //get the placeholder "value" from the textbox and store it as a variable
-
-});
-
-
-// //  // Event listener on the submit button
-// var input = function () {
-//         $("#exampleFormControlInput1").val().trim();
-
-//         // creat a new variable that will hold the placeholder "value" as a button
-//         var inputName = $("<button>");
-//         // Then give it a data-person
-//         inputName.attr("id", "item-" + data - person);
-//         inputName.text(input);
-//     };
-
-
-
-//     input();
-//     console.log(input);
 
